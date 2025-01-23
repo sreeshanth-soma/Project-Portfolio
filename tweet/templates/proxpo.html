@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+proXpo - Empowering Innovation
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto py-8">
+    <!-- Heading -->
+    <h1 class="text-4xl font-bold text-center mb-6">Welcome to proXpo</h1>
+
+    <!-- About Section -->
+    <section class="bg-green-400 p-6 rounded-lg text-white mb-6">
+        <h2 class="text-2xl font-semibold mb-4">About proXpo</h2>
+        <p>
+            Empowering Innovation through Peer Review
+            <br />
+            Innovation thrives on collaboration and feedback. To foster a culture of academic exchange, we are
+            developing "proXpo", a web-based platform designed to enable students to showcase their projects effectively
+            while encouraging engagement from peers and professors.
+        </p>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="bg-gray-100 p-6 rounded-lg mb-6">
+        <h2 class="text-2xl font-semibold mb-4 text-black">Key Features</h2>
+        <ul class="list-disc pl-6 text-black">
+            <li>Showcase Projects: Upload images and write project summaries to create a digital project portfolio.</li>
+            <li>Feedback Mechanism: Facilitate constructive feedback through user comments and a rating system.</li>
+            <li>Collaborative Learning: Enable professors and peers to interact, share insights, and contribute to project improvement.</li>
+        </ul>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-blue-500 text-white p-6 rounded-lg">
+        <h2 class="text-2xl font-semibold mb-4">Contact Us</h2>
+        <p>
+            For any queries or suggestions, feel free to reach out to us at
+            <a href="mailto:sreeeshusoma@gmail.com" class="underline">contact@proxpo.com</a>.
+        </p>
+    </section>
+</div>
+{% endblock %}
+

@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Search Results
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <h1 class="text-2xl font-semibold mb-4">Search Results</h1>
+
+    {% if query %}
+        <p class="mb-4">You searched for: <strong>{{ query }}</strong></p>
+
+        {% if users %}
+            <ul class="space-y-4">
+                {% for user in users %}
+                    <li class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-md">
+                        <p class="text-lg font-medium text-gray-900 dark:text-white">{{ user.username }}</p>
+                        <!-- Add more user details if needed -->
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-red-500">No users found matching your search.</p>
+        {% endif %}
+    {% else %}
+        <p class="text-gray-500">Type a username in the search bar to find users.</p>
+    {% endif %}
+</div>
+{% endblock %}

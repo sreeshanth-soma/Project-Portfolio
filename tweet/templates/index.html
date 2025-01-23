@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Tweet Home
+{% endblock %}
+
+{% block content %}
+
+<!-- Display project details -->
+{% if project %}
+    <div>
+        <h2>Project Details</h2>
+        <p><strong>Text:</strong> {{ project.text }}</p>
+        <p><strong>Created by:</strong> {{ project.user.username }}</p>
+        <p><strong>Created at:</strong> {{ project.created_at }}</p>
+        {% if project.image %}
+            <img src="{{ project.image.url }}" alt="Project Image" style="max-width: 100%; height: auto;">
+        {% endif %}
+    </div>
+{% else %}
+    <p>No project found!</p>
+{% endif %}
+
+{% endblock %}

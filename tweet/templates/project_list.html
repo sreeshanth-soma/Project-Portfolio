@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Tweet Home
+{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-center my-6 text-gray-200">Hello, welcome to the project page</h1>
+
+<a href="{% url "project_create" %}" class="block text-center bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 mb-6">
+    Create a Project
+</a>
+
+<div class="container flex flex-wrap gap-6 justify-center">
+    {% for project in projects %}
+    <div class="bg-gray-800 text-white rounded-lg shadow-lg p-6 w-96 relative">
+        <!-- Three Dots Dropdown -->
+        {% if project.user == user %}
+        <div class="absolute top-4 right-4">
+            <button class="p-2 rounded-full hover:bg-gray-700">
+                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M6 10a2 2 0 114 0 2 2 0 01-4 0zM2 10a2 2 0 114 0 2 2 0 01-4 0zM10 10a2 2 0 114 0 2 2 0 01-4 0z"></path>
+                </svg>
+            </button>
+            <div class="hidden bg-gray-700 text-white rounded-lg shadow-lg absolute right-0 mt-2">
+                <a href="{% url 'project_edit' project.id %}" class="block w-full text-left px-4 py-2 hover:bg-gray-600">Edit</a>
+                <a href="{% url 'project_delete' project.id %}" class="block w-full text-left px-4 py-2 hover:bg-gray-600">Delete</a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Project Image -->
+        <div class="flex justify-center mb-4">
+            <img src="{{ project.image.url }}" alt="Project Image" class="w-64 h-64 rounded-lg object-cover">
+        </div> 
+
+        <!-- Project Name -->
+        <div class="text-center">
+            <h2 class="text-2xl font-semibold">{{ project.user.username }}</h2>
+        </div>
+
+        <!-- Rating -->
+        {% comment %} <div class="flex justify-center items-center mt-4">
+            {% for i in range(1, 6) %}
+                {% if i <= project.rating %}
+                    <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.181c.969 0 1.371 1.24.588 1.81l-3.39 2.455a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.39 2.455c-.784.57-1.838-.197-1.54-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.6 9.392c-.783-.57-.38-1.81.588-1.81h4.181a1 1 0 00.95-.69l1.286-3.965z"></path>
+                    </svg>
+                {% else %}
+                    <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.181c.969 0 1.371 1.24.588 1.81l-3.39 2.455a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.39 2.455c-.784.57-1.838-.197-1.54-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.6 9.392c-.783-.57-.38-1.81.588-1.81h4.181a1 1 0 00.95-.69l1.286-3.965z"></path>
+                    </svg>
+                {% endif %}
+            {% endfor %}
+        </div> {% endcomment %}
+
+        <!-- Read More Button -->
+         <div class="mt-6 text-center">
+            <a href="{% url 'index' project.id %}" class="text-blue-400 hover:underline font-medium">Read more -></a>
+        </div>  
+    </div>
+    {% endfor %}
+</div>
+<script>
+     document.addEventListener("DOMContentLoaded", () => {
+         // Select all dropdown buttons
+         const dropdownButtons = document.querySelectorAll('.absolute > button');
+ 
+         dropdownButtons.forEach(button => {
+             button.addEventListener('click', () => {
+                 // Toggle visibility of the dropdown menu
+                 const dropdownMenu = button.nextElementSibling;
+                 dropdownMenu.classList.toggle('hidden');
+             });
+         });
+ 
+         // Optionally, close dropdowns when clicking outside
+         document.addEventListener('click', (e) => {
+             dropdownButtons.forEach(button => {
+                 const dropdownMenu = button.nextElementSibling;
+                 if (!button.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                     dropdownMenu.classList.add('hidden');
+                 }
+             });
+         });
+     });
+ </script>
+ 
+ 
+{% endblock %}
+

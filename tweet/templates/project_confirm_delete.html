@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+tweet home
+{% endblock %}
+
+{% block content %}
+<h1 class="text-5xl">Are you sure do you want to delete the project?</h1>
+<form method="post">
+     {% csrf_token %}
+     <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Delete</button>
+     <a href="{% url 'project_list' %}" class="text-blue-500 hover:text-white font-medium underline bg-blue-100 hover:bg-blue-500 px-4 py-2 rounded transition mt-4">Cancel</a>
+</form>
+{% endblock %}

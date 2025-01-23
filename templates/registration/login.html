@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Sign In
+{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="relative flex flex-col bg-white shadow-md border border-gray-200 w-96 rounded-lg">
+        <!-- Header -->
+        <div class="relative flex justify-center items-center h-20 rounded-t-lg bg-gray-800">
+            <h2 class="text-2xl font-bold text-white">Sign In</h2>
+        </div>
+
+        <!-- Form -->
+        <form method="POST" class="flex flex-col gap-4 p-6">
+            {% csrf_token %}
+            <!-- Username -->
+            <div>
+                <label for="username" class="block mb-2 text-sm text-gray-700">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="w-full bg-gray-50 text-gray-700 text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    placeholder="Your Username"
+                    required />
+            </div>
+
+            <!-- Password -->
+            <div class="relative">
+               <label for="password" class="block mb-2 text-sm text-gray-700">Password</label>
+               <div class="relative">
+                   <input
+                       type="password"
+                       id="password"
+                       name="password"
+                       class="w-full bg-gray-50 text-gray-700 text-sm border border-gray-300 rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                       placeholder="Your Password"
+                       required />
+                   <!-- Eye icon -->
+                   <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 flex items-center pr-3">
+                       <svg id="eye-icon" class="w-5 h-5 text-gray-500 hover:text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-.274.797-.606 1.563-1 2.29M15.04 16.44A9.953 9.953 0 0112 17c-2.016 0-3.904-.56-5.465-1.56M21.542 14C20.268 18.057 16.477 21 12 21c-4.478 0-8.268-2.943-9.542-7" />
+                       </svg>
+                   </button>
+               </div>
+           </div>
+           
+
+            <!-- Remember Me -->
+            <div class="flex items-center">
+                <input
+                    type="checkbox"
+                    id="remember"
+                    name="remember"
+                    class="h-4 w-4 border-gray-300 rounded focus:ring-gray-500" />
+                <label for="remember" class="ml-2 text-sm text-gray-700">Remember Me</label>
+            </div>
+
+            <!-- Sign In Button -->
+            <button
+                type="submit"
+                class="w-full bg-gray-800 text-white py-2 rounded-md text-sm font-semibold hover:bg-gray-700 focus:ring-2 focus:ring-gray-500">
+                Sign In
+            </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="p-6 pt-0 text-center">
+            <p class="text-sm text-gray-700">
+                Don’t have an account?
+                <a href="{% url 'register' %}" class="text-gray-800 font-semibold underline hover:text-gray-900">
+                    Sign up
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+<script>
+     function togglePasswordVisibility() {
+          const passwordInput = document.getElementById("password");
+          const eyeIcon = document.getElementById("eye-icon");
+          
+          if (passwordInput.type === "password") {
+              passwordInput.type = "text";
+              eyeIcon.setAttribute("fill", "currentColor"); // Make the icon appear filled (optional)
+          } else {
+              passwordInput.type = "password";
+              eyeIcon.setAttribute("fill", "none"); // Revert the icon to outline (optional)
+          }
+      }
+      
+</script>
+{% endblock %}

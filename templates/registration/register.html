@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Sign Up
+{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="relative flex flex-col bg-white shadow-md border border-gray-200 w-96 rounded-lg">
+        <!-- Header -->
+        <div class="relative flex justify-center items-center h-20 rounded-t-lg bg-gray-800">
+            <h2 class="text-2xl font-bold text-white">Sign Up</h2>
+        </div>
+
+        <!-- Form -->
+        <form method="POST" class="flex flex-col gap-4 p-6">
+            {% csrf_token %}
+            
+            <!-- General Form Errors -->
+            {% if form.non_field_errors %}
+            <div class="p-4 text-sm text-red-700 bg-red-100 border border-red-300 rounded-md">
+                {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Username -->
+            <div>
+                <label for="username" class="block mb-2 text-sm text-gray-700">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="w-full bg-gray-50 text-gray-700 text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    placeholder="Your Username"
+                    value="{{ form.username.value }}"
+                    required />
+                <!-- Username Errors -->
+                {% if form.username.errors %}
+                <p class="mt-1 text-sm text-red-600">
+                    {% for error in form.username.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block mb-2 text-sm text-gray-700">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="w-full bg-gray-50 text-gray-700 text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    placeholder="Your Email"
+                    value="{{ form.email.value }}"
+                    required />
+                <!-- Email Errors -->
+                {% if form.email.errors %}
+                <p class="mt-1 text-sm text-red-600">
+                    {% for error in form.email.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password1" class="block mb-2 text-sm text-gray-700">Password</label>
+                <input
+                    type="password"
+                    id="password1"
+                    name="password1"
+                    class="w-full bg-gray-50 text-gray-700 text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    placeholder="Create a Password"
+                    required />
+                <!-- Password Errors -->
+                {% if form.password1.errors %}
+                <p class="mt-1 text-sm text-red-600">
+                    {% for error in form.password1.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+                <label for="password2" class="block mb-2 text-sm text-gray-700">Confirm Password</label>
+                <input
+                    type="password"
+                    id="password2"
+                    name="password2"
+                    class="w-full bg-gray-50 text-gray-700 text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    placeholder="Confirm Your Password"
+                    required />
+                <!-- Confirm Password Errors -->
+                {% if form.password2.errors %}
+                <p class="mt-1 text-sm text-red-600">
+                    {% for error in form.password2.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Register Button -->
+            <button
+                type="submit"
+                class="w-full bg-gray-800 text-white py-2 rounded-md text-sm font-semibold hover:bg-gray-700 focus:ring-2 focus:ring-gray-500">
+                Register
+            </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="p-6 pt-0 text-center">
+            <p class="text-sm text-gray-700">
+                Already have an account?
+                <a href="{% url 'login' %}" class="text-gray-800 font-semibold underline hover:text-gray-900">
+                    Sign In
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
