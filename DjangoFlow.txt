@@ -1,0 +1,190 @@
+-> First thing to do is to create a Virtual Environment:
+     - You can create a virtual environment using venv module 
+
+          * python -m venv env_name
+
+     - Activate the virtual environment, using the command:
+
+          * source env_name/bin/activate
+
+
+
+-> Now,  Initialize Git
+     - Set up Git for version control to manage the project's progress and mark milestones.  
+          - Now, in vscode go to the source control section
+          - Then click on Initialize Repository
+                         (or)
+          - Go to the terminal and type:
+               * git init
+               
+          - Now, configure a username and email with git:
+               - Open the terminal
+               - Commands:
+                    
+                    * git config user.name "{your github username}"
+                    * git config user.email "{Your email linked to your github}"
+
+
+     - To save changes, in the source control section there type a message and click commit. This creates a milestone like timeline
+
+
+
+
+-> Now, Install Django. Install Django using pip:
+
+  * pip install Django
+
+
+
+-> Now, Start a New Django Project:
+
+     - Use the following command to create a new project:
+          django-admin startproject {Your Project Name}
+
+     - This creates a project directory with the following levels:
+          1) Project level:      Contains settings.py, urls.py, and other configurations.
+          2) App level:          For individual app logic.
+          3) Manage.py level:    A script to manage the project (like to run the server, migrate).
+
+
+
+
+-> Now, in the Project Settings(Project Level)
+	- First, import os in settings.py
+
+	- Set up media and static files by adding the following lines at the end of settings.py:
+
+  		MEDIA_URL = '/media/'
+  		MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+  		STATIC_URL = '/static/'
+  		STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+     - In the project's urls.py, append the following to urlpatterns:
+
+          from django.conf import settings
+          from django.conf.urls.static import static
+
+	- For serving media files (like images or documents) during development.You need to append at the end of the urlpatterns in your urls.py file:
+	     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+     - For configuring templates in the urls:
+     
+          -In the settings.py file add the following to 'DIRS' list in the TEMPLATES list:
+
+                * os.path.join(BASE_DIR, 'templates')
+
+     - Now, create a folder named 'templates' in the project.
+
+
+     - To register the requirements of a project at a place use the following command:
+
+               * pip freeze > requirements.txt
+
+
+
+
+-> Now, create an App(App Level)
+
+	- To create a new app, run:
+
+          * python manage.py startapp {Your App Name}
+     
+     - Register the app in the project’s `settings.py` under `INSTALLED_APPS`:
+     INSTALLED_APPS = [
+          ...
+          'app_name',
+     ]
+
+     - By default, the app does not include urls.py or forms.py. Create these files manually in the app directory as needed.
+
+     -Now, to make django know that the project urls should direct to the app urls, we have to add path in the project's urls.py file which routes to the app url. Basically, to connect app's urls.py and the project's urls.py:
+
+          - First, import the include method in project's urls.py file:
+               - It is present in django.urls
+
+          - Add a path to the app in urlpatterns in project's urls.py:
+
+               * urlpatterns = [
+                    path('app_name/', include('app_name.urls')),
+                    ...
+               ]
+
+          - Django can't handle image field directly. So, we have to add Pillow library to handle image processing. Command to install Pillow:
+
+               * python -m pip install Pillow
+               
+
+
+
+-> Now, to run the Server
+     - Run the command
+          
+          * python manage.py runserver
+
+     - Now, open the browser and navigate to http://127.0.0.1:8000/ to view the project.
+
+
+
+-> Plugins:
+
+     - For downloading tailwind go the django-tailwind page on pypi.org
+
+     - To download run the command:
+
+          * pip install django-tailwind
+
+     - Now, install tailwind-reload using the following command:
+
+          * pip install 'django-tailwind[reload]'
+
+     - Now, add tailwind, hot reloading in the installed apps:
+
+          # 'tailwind',
+          # 'django_browser_reload',
+
+     - Now, we have to start the tailwind app using the following command:
+
+          * python manage.py tailwind init
+
+          - Now, we get the option to change the app name but theme is good so to keep the default name theme just click enter.
+
+     - Now, add theme in the Installed apps in settings.py file 
+
+     - Now, we have to add some settings:
+
+          # TAILWIND_APP_NAME = '{tailwind app name(default is theme)}'
+
+          - Now, we want to run two servers one for the django project and other for tailwind so we to specify the tailwind ip as follows:
+
+               # INTERNAL_IPS = ['127.0.0.1]
+
+     - Now, using manage.py we to install tailwind, like we have got the theme app in this case. So, we just have to initialize it:
+
+          * python manage.py tailwind install
+
+     - Now, to actually use tailwind create one more terminal window, again activate the virtual environment where the project folder is present. Rename the terminal for better clarity. Now, run the command:
+
+          * python manage.py tailwind start
+
+     - Now, go back to settings.py and specify the bin path to npm
+
+          # NPM_BIN_PATH = '{npm path}'
+
+          - To know the path to npm, open the terminal and run 'where npm'
+     
+     - Now, every time we change a style we have to reload but we have already installed hot reloading. So, to make it accessible:
+
+          - In the MIDDLEWARE add the following at the last:
+
+               # "django_browser_reload.middleware.BrowserReloadMiddleware",
+
+
+     - Add the following url at the last of the Project's url file:
+
+          * path("____reload__/", include("django_browser_reload.urls")),
+
+
+
+     --------- Finally, tailwind setup is done :)
+
