@@ -1,14 +1,68 @@
 {% extends "layout.html" %}
 
 {% block title %}
-tweet home
+Delete Project
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .delete-container {
+        background-color: #0F172A; /* Dark background for card */
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .delete-title {
+        color: #F8FAFC; /* Light text for contrast */
+        margin-bottom: 24px;
+    }
+
+    .delete-btn {
+        background-color: #EF4444; /* Red button for delete */
+        color: #FFFFFF;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .delete-btn:hover {
+        background-color: #DC2626; /* Darker red on hover */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(220, 38, 38, 0.4);
+    }
+
+    .cancel-btn {
+        color: #3B82F6; /* Blue link */
+        font-weight: 500;
+        text-decoration: none;
+        background-color: rgba(59, 130, 246, 0.1); /* Light blue background */
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .cancel-btn:hover {
+        color: #2563EB; /* Darker blue on hover */
+        background-color: rgba(37, 99, 235, 0.2);
+        transform: translateY(-2px);
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<h1 class="text-5xl">Are you sure do you want to delete the project?</h1>
-<form method="post">
-     {% csrf_token %}
-     <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Delete</button>
-     <a href="{% url 'project_list' %}" class="text-blue-500 hover:text-white font-medium underline bg-blue-100 hover:bg-blue-500 px-4 py-2 rounded transition mt-4">Cancel</a>
-</form>
+<div class="delete-container">
+    <h1 class="delete-title text-3xl font-semibold">
+        Are you sure you want to delete this project?
+    </h1>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <button class="delete-btn">Delete</button>
+        <a href="{% url 'project_list' %}" class="cancel-btn">Cancel</a>
+    </form>
+</div>
 {% endblock %}

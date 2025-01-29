@@ -14,10 +14,11 @@ Search Results
         {% if users %}
             <ul class="space-y-4">
                 {% for user in users %}
-                    <li class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-md">
-                        <p class="text-lg font-medium text-gray-900 dark:text-white">{{ user.username }}</p>
-                        <!-- Add more user details if needed -->
-                    </li>
+                <li class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-md">
+                    <a href="{% url 'user_profile' user.username %}" class="text-lg font-medium text-blue-500 hover:underline">
+                        {{ user.username }}
+                    </a>
+                </li>                
                 {% endfor %}
             </ul>
         {% else %}

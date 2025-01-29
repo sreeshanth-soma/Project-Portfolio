@@ -12,6 +12,7 @@ urlpatterns = [
     path('<int:project_id>/delete/',views.project_delete, name="project_delete"),
     path('search/', views.search_users, name='search_users'),
     path('register/', views.register, name = "register"),
+    path('profile/<str:username>/', views.user_profile, name='user_profile'),
 
     path('about/', views.about, name='about'),
     path('services/', views.services, name='services'),

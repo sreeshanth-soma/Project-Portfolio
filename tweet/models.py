@@ -9,6 +9,7 @@ class Project(models.Model):
      image = models.ImageField(upload_to='photos/', blank=True, null=True)
      created_at = models.DateTimeField(auto_now_add = True)
      updated_at = models.DateTimeField(auto_now = True)
+     rating = models.IntegerField(default = 3)
 
      def __str__(self):
          return f'{self.user.username} - {self.text}'

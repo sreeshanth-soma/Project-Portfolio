@@ -1,7 +1,6 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from .models import Project
 from .forms import ProjectForm, UserRegistrationForm
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib.auth.models import User
@@ -26,6 +25,11 @@ def search_users(request):
     query = request.GET.get('q', '') 
     users = User.objects.filter(Q(username__icontains=query)) if query else [] 
     return render(request, 'search_results.html', {'query': query, 'users': users})
+
+def user_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    projects = Project.objects.filter(user=user).order_by('-created_at')
+    return render(request, 'profile.html', {'user': user, 'projects': projects})
 
 def project_list(request):
      projects = Project.objects.all().order_by('-created_at')

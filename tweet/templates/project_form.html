@@ -1,49 +1,94 @@
 {% extends "layout.html" %}
 
 {% block title %}
-tweet home
+Tweet Home
 {% endblock %}
 
 {% block extra_styles %}
 <style>
-     textarea {
-         background-color: #ffffff;
-         color: #000000;
-         border: 1px solid #ccc;
-         padding: 8px;
-         border-radius: 4px;
-         font-size: 16px;
-     }
- 
-     textarea:focus {
-         outline: none;
-         border-color: #007bff;
-         box-shadow: 0 0 5px #007bff;
-     }
- </style>
- 
+    textarea {
+        background-color: #1E293B; /* Darker background for dark mode compatibility */
+        color: #FFFFFF;
+        border: 2px solid #64748B; /* Subtle gray border */
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 16px;
+        width: 100%;
+        resize: vertical; /* Allow resizing only vertically */
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: #3B82F6; /* Blue border on focus */
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.6); /* Soft glow */
+    }
+
+    .form-container {
+        background-color: #0F172A; /* Form container background */
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        color: #F8FAFC; /* Light text for contrast */
+    }
+
+    button {
+        background-color: #FACC15; /* Bright yellow button */
+        color: #1E293B; /* Dark text for contrast */
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    button:hover {
+        background-color: #F59E0B; /* Darker yellow on hover */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(245, 158, 11, 0.4);
+    }
+
+    a {
+        color: #3B82F6; /* Blue links */
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #2563EB; /* Darker blue on hover */
+        background-color: rgba(59, 130, 246, 0.1);
+        border-radius: 8px;
+        padding: 4px 8px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="space-y-6">
-    <h1 class="text-2xl font-bold">Hello, welcome to the tweet page</h1>
+<div class="space-y-6 max-w-3xl mx-auto pt-10">
+    <h1 class="text-3xl font-bold text-center text-gray-200">Welcome to the Tweet Page</h1>
 
-    <h2 class="text-xl font-semibold">
-        {% if form.instance.pk %}
-            Edit Project
-        {% else %}
-            Create Project
-        {% endif %}
-    </h2>
+    <div class="form-container">
+        <h2 class="form-title text-2xl font-semibold mb-6">
+            {% if form.instance.pk %}
+                Edit Project
+            {% else %}
+                Create Project
+            {% endif %}
+        </h2>
 
-    <form method="post" enctype="multipart/form-data" class="space-y-4">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded" type="submit">Submit</button>
-    </form>
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            <div class="space-y-4">
+                {{ form.as_p }}
+            </div>
+            <button type="submit">Submit</button>
+        </form>
 
-    <a href="{% url 'project_list' %}" class="text-blue-500 hover:text-white font-medium underline bg-blue-100 hover:bg-blue-500 px-4 py-2 rounded transition mt-4">
-        Return back to the Projects List
-    </a>
+        <a href="{% url 'project_list' %}" class="mt-6 inline-block">
+            Return to Projects List
+        </a>
+    </div>
 </div>
 {% endblock %}
