@@ -1,18 +1,83 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Project
-from .forms import ProjectForm, UserRegistrationForm
+from .models import Project, Comment
+from .forms import ProjectForm, UserRegistrationForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Avg
+from django.contrib import messages
+
 
 # Create your views here.
+
+# def chat_view(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+#             user_message = data.get('message', '')
+
+#             if not user_message:
+#                 return JsonResponse({'error': 'No message provided'}, status=400)
+
+#             openai.api_key = settings.OPENAI_API_KEY  # Set your OpenAI API key
+
+#             # Check if the OpenAI key is valid
+#             if not openai.api_key:
+#                 return JsonResponse({'error': 'OpenAI API Key not set'}, status=400)
+
+#             response = openai.Completion.create(
+#                 engine="text-davinci-003",
+#                 prompt=user_message,
+#                 max_tokens=150
+#             )
+
+#             bot_reply = response.choices[0].text.strip()  # Get the AI's response
+#             return JsonResponse({'response': bot_reply})
+
+#         except openai.error.OpenAIError as e:
+#             # This will catch any OpenAI API-specific errors
+#             error_message = f"OpenAI API Error: {str(e)}"
+#             print(error_message)  # You can log it or print for debugging
+#             return JsonResponse({'error': error_message}, status=500)
+
+#         except Exception as e:
+#             # General error handler for any other exceptions
+#             error_message = f"Something went wrong: {str(e)}"
+#             print(error_message)  # You can log it or print for debugging
+#             return JsonResponse({'error': error_message}, status=500)
+
+#     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+def add_comment(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+
+    # Check if the user already commented on this project
+    if Comment.objects.filter(user=request.user, project=project).exists():
+        messages.error(request, "You have already commented on this project.")
+        return redirect('project_detail', project_id=project.id)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.project = project
+            comment.save()
+            messages.success(request, "Your comment has been added.")
+            return redirect('project_detail', project_id=project.id)
+    else:
+        form = CommentForm()
+
+    return render(request, 'add_comment.html', {'form': form, 'project': project})
+
+
 
 def proxpo(request):
      return render(request, 'proxpo.html')
 
 def index(request, project_id):
-    project = get_object_or_404(Project, pk=project_id) 
+    project = get_object_or_404(Project, pk=project_id)
     return render(request, 'index.html', {'project': project})
 
 def about(request):
@@ -32,37 +97,59 @@ def user_profile(request, username):
     return render(request, 'profile.html', {'user': user, 'projects': projects})
 
 def project_list(request):
-     projects = Project.objects.all().order_by('-created_at')
-     return render(request, 'project_list.html', {'projects':projects})
+    projects = Project.objects.all().order_by('-created_at')
+    return render(request, 'project_list.html', {'projects': projects})
+
+
+def project_detail(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    comments = Comment.objects.filter(project=project).order_by('-created_at')
+
+    if request.method == 'POST' and request.user != project.user:  # Only other users can comment
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.project = project
+            comment.save()
+            return redirect('project_detail', project_id=project.id)
+    else:
+        form = CommentForm()
+
+    return render(request, 'project_detail.html', {
+        'project': project,
+        'comments': comments,
+        'form': form,
+    })
+
 
 @login_required
 def project_create(request):
-     if request.method == 'POST':
-          form = ProjectForm(request.POST, request.FILES)
-          if form.is_valid():
-               project = form.save(commit = False)
-               project.user = request.user
-               project.save()
-               return redirect('project_list')
-
-     form = ProjectForm()
-     return render(request, 'project_form.html', {'form':form})
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.user = request.user
+            project.save()
+            return redirect('project_list')
+    else:
+        form = ProjectForm()
+    return render(request, 'project_form.html', {'form': form})
 
 @login_required
 def project_edit(request, project_id):
-     project = get_object_or_404(Project, pk = project_id, user = request.user)
-     if request.method == 'POST':
-          form = ProjectForm(request.POST, request.FILES, instance = project)
-          if form.is_valid():
-               project = form.save(commit=False)
-               project.user = request.user
-               project.save()
+    project = get_object_or_404(Project, pk=project_id, user=request.user)
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES, instance=project)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.user = request.user
+            project.save()
+            return redirect('project_list')
+    else:
+        form = ProjectForm(instance=project)
+    return render(request, 'project_form.html', {'form': form})
 
-               return redirect('project_list')
-     else:
-          form = ProjectForm(instance=project)
-
-     return render(request, 'project_form.html', {'form':form})
 
 @login_required
 def project_delete(request, project_id):
