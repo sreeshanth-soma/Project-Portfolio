@@ -34,7 +34,7 @@ Sign Up
                     name="username"
                     class="w-full bg-gray-50 text-gray-700 text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     placeholder="Your Username"
-                    value="{{ form.username.value }}"
+                    value="{{ form.username.value|default_if_none:'' }}"
                     required />
                 <!-- Username Errors -->
                 {% if form.username.errors %}
@@ -55,7 +55,7 @@ Sign Up
                     name="email"
                     class="w-full bg-gray-50 text-gray-700 text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     placeholder="Your Email"
-                    value="{{ form.email.value }}"
+                    value="{{ form.email.value|default_if_none:''  }}"
                     required />
                 <!-- Email Errors -->
                 {% if form.email.errors %}

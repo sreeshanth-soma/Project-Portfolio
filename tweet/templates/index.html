@@ -1,90 +1,197 @@
-<!-- index.html -->
 {% extends "layout.html" %}
 
 {% block content %}
 <div class="container mx-auto p-4">
+    <a href="{% url 'project_list' %}" class="text-yellow-400 text-lg font-semibold hover:text-yellow-300 flex items-center mb-4 transition duration-300">
+        ← BACK TO PROJECTS
+    </a>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{% if message.tags == 'error' %}bg-red-300{% else %}bg-green-300{% endif %} border-l-4 border-red-400 p-4 mb-4 rounded-lg shadow-md text-xl font-semibold">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <!-- Project Details -->
-    <div class="bg-gray-800 text-white rounded-lg shadow-lg p-6 mb-6">
+    <div class="bg-white text-gray-900 dark:bg-gray-800 dark:text-white rounded-lg shadow-lg p-6 mb-6 transition-colors duration-300">
         <h2 class="text-2xl font-bold mb-4">{{ project.text }}</h2>
-        <p class="text-gray-400">By: {{ project.user.username }}</p>
-        <p class="text-gray-400">Created at: {{ project.created_at }}</p>
+        <div class="flex items-center space-x-4 mb-4">
+            <span class="text-gray-500 dark:text-gray-400">By:</span>
+            <a href="{% url 'user_profile' project.user.username %}" class="text-blue-500 hover:text-blue-400">
+                @{{ project.user.username }}
+            </a>
+        </div>
+        <p class="text-gray-500 dark:text-gray-400">Posted {{ project.created_at|timesince }} ago</p>
         {% if project.image %}
             <img src="{{ project.image.url }}" alt="Project Image" class="w-full h-64 object-cover rounded-lg mt-4">
         {% endif %}
     </div>
 
-    <!-- Comment and Rating Section -->
-    {% if request.user != project.user %}  <!-- Only show form to other users -->
-    <div class="bg-gray-800 text-white rounded-lg shadow-lg p-6 mb-6">
-        <h3 class="text-xl font-bold mb-4">Leave a Comment and Rating</h3>
-        <form method="post" action="{% url 'add_comment' project.id %}">
-            {% csrf_token %}
-            <!-- Star Rating -->
-            <div class="flex items-center mb-4">
-                <span class="mr-2">Rating:</span>
-                <div class="flex space-x-1">
-                    {% for i in "12345" %}
-                        <button type="button" data-rating="{{ i }}" class="star-rating text-gray-400 hover:text-yellow-400 focus:outline-none">
-                            ★
-                        </button>
-                    {% endfor %}
-                </div>
-                <input type="hidden" name="rating" id="rating" value="3">  <!-- Default rating -->
-            </div>
-            <!-- Comment Box -->
-            <textarea name="text" class="w-full p-2 rounded-lg bg-gray-700 text-white placeholder-gray-400" rows="4" placeholder="Write your comment..."></textarea>
-            <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Submit</button>
-        </form>
-    </div>
-    {% else %}
-        <p class="text-gray-400">You cannot comment on your own project.</p>
-    {% endif %}
+    <!-- Comment Section -->
+    <div class="space-y-6">
+        {% if request.user.is_authenticated %}
+            {% if request.user != project.user %}
+                {% if not user_already_commented %}
+                    <div class="bg-white text-gray-900 dark:bg-gray-800 dark:text-white rounded-lg shadow-lg p-6 transition-colors duration-300">
+                        <h3 class="text-xl font-bold mb-4">Leave Your Feedback</h3>
+                        <form method="post" action="{% url 'add_comment' project.id %}" onsubmit="disableSubmitButton()">
+                            {% csrf_token %}
+                            
+                            <!-- Star Rating -->
+                            <div class="flex items-center mb-4">
+                                <span class="mr-2">Rating:</span>
+                                <div class="flex space-x-1" id="star-container">
+                                    {% for i in "12345" %}
+                                        <button type="button" data-rating="{{ i }}" 
+                                                class="star-rating text-2xl {% if forloop.counter <= 3 %}text-yellow-400{% else %}text-gray-400{% endif %} 
+                                                       hover:text-yellow-300 transition-colors duration-200">
+                                            ★
+                                        </button>
+                                    {% endfor %}
+                                </div>
+                                <input type="hidden" name="rating" id="rating" value="3">
+                            </div>
 
-    <!-- Display Comments -->
-    <div class="bg-gray-800 text-white rounded-lg shadow-lg p-6">
-        <h3 class="text-xl font-bold mb-4">Comments</h3>
-        {% for comment in project.comments.all %}
-            <div class="mb-4 border-b border-gray-700 pb-4">
-                <p class="text-gray-400">{{ comment.user.username }} - {{ comment.created_at }}</p>
-                <div class="flex items-center mb-2">
-                    <span class="mr-2">Rating:</span>
-                    <div class="flex space-x-1">
-                        {% for i in "12345" %}
-                            <span class="{% if i|add:0 <= comment.rating %}text-yellow-400{% else %}text-gray-400{% endif %}">★</span>
-                        {% endfor %}
+                            <!-- Comment Box -->
+                            <textarea name="text" 
+                                      class="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 
+                                             focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                                      rows="4" 
+                                      placeholder="Write your detailed feedback here..."
+                                      required></textarea>
+                            
+                            <button id="submit-btn" 
+                                    type="submit" 
+                                    class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg 
+                                           transition-all duration-300 transform hover:scale-105">
+                                Post Feedback
+                            </button>
+                        </form>
                     </div>
+                {% else %}
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg">
+                        <p>✓ You've already submitted feedback for this project</p>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-lg">
+                    <p>ℹ️ You can't comment on your own project</p>
                 </div>
-                <p>{{ comment.text }}</p>
+            {% endif %}
+        {% else %}
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg">
+                <p>🔒 Please <a href="{% url 'login' %}" class="text-yellow-700 hover:text-yellow-600 underline">login</a> to leave feedback</p>
             </div>
-        {% empty %}
-            <p>No comments yet.</p>
-        {% endfor %}
+        {% endif %}
+
+
+        <!-- Comments List -->
+        <div class="bg-white text-gray-900 dark:bg-gray-800 dark:text-white rounded-lg shadow-lg p-6 transition-colors duration-300">
+            <h3 class="text-xl font-bold mb-4">Community Feedback ({{ project.comments.count }})</h3>
+
+            {% for comment in project.comments.all %}
+                <div class="mb-6 pb-4 border-b border-gray-200 dark:border-gray-700 relative">  
+
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-3">
+                            <a href="{% url 'user_profile' comment.user.username %}" 
+                            class="font-semibold text-blue-500 hover:text-blue-400">
+                                @{{ comment.user.username }}
+                            </a>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                {{ comment.created_at|timesince }} ago
+                                {% if comment.edited_at %}
+                                    <span class="text-gray-400 ml-1">
+                                        (edited {{ comment.edited_at|timesince }} ago)
+                                    </span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        
+                        <!-- Right section for stars and edit button -->
+                        <div class="flex items-center space-x-2">
+                            <div class="flex space-x-1">
+                                {% for i in "12345" %}
+                                    <span class="{% if forloop.counter <= comment.rating %}text-yellow-400{% else %}text-gray-300{% endif %}">
+                                        ★
+                                    </span>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Edit Button -->
+                            {% if comment.user == request.user %}
+                            <a href="{% url 'edit_comment' comment.id %}"
+                            class="text-blue-500 hover:text-blue-400 text-sm">
+                                ✏️ Edit
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <p class="text-gray-700 dark:text-gray-300 pl-2">{{ comment.text }}</p>
+                </div>
+            {% empty %}
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No feedback yet. Be the first to share your thoughts!</p>
+            {% endfor %}
+        </div>
+
     </div>
 </div>
 
-<!-- JavaScript for Star Rating -->
+<!-- Improved Star Rating Script -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const stars = document.querySelectorAll('.star-rating');
         const ratingInput = document.getElementById('rating');
+        const starContainer = document.getElementById('star-container');
 
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                const rating = star.getAttribute('data-rating');
-                ratingInput.value = rating;
+        // Initialize with default rating (3 stars)
+        stars.forEach((star, index) => {
+            if (index < 3) {
+                star.classList.add('text-yellow-400');
+                star.classList.remove('text-gray-400');
+            }
+        });
 
-                // Update star colors
-                stars.forEach((s, index) => {
-                    if (index < rating) {
-                        s.classList.add('text-yellow-400');
-                        s.classList.remove('text-gray-400');
-                    } else {
-                        s.classList.add('text-gray-400');
-                        s.classList.remove('text-yellow-400');
-                    }
-                });
+        starContainer.addEventListener('click', (e) => {
+            const star = e.target.closest('.star-rating');
+            if (!star) return;
+
+            const rating = parseInt(star.dataset.rating);
+            ratingInput.value = rating;
+
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.classList.add('text-yellow-400');
+                    s.classList.remove('text-gray-400');
+                } else {
+                    s.classList.add('text-gray-400');
+                    s.classList.remove('text-yellow-400');
+                }
             });
         });
     });
+
+    function disableSubmitButton() {
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = 'Posting...';
+        btn.classList.remove('hover:scale-105');
+        btn.classList.add('opacity-75', 'cursor-not-allowed');
+    }
 </script>
+
+<style>
+    .star-rating {
+        transition: all 0.15s ease-in-out;
+    }
+    .star-rating:hover {
+        transform: scale(1.2);
+    }
+</style>
+
 {% endblock %}

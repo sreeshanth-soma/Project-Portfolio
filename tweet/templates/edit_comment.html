@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h2 class="text-2xl font-bold mb-4">Edit Comment</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Star Rating -->
+        <div class="flex items-center mb-4">
+            <span class="mr-2">Rating:</span>
+            <div class="flex space-x-1" id="star-container">
+                {% for i in "12345" %}
+                    <button type="button" data-rating="{{ i }}" 
+                            class="star-rating text-2xl {% if forloop.counter <= form.rating.value %}text-yellow-400{% else %}text-gray-400{% endif %}">
+                        ★
+                    </button>
+                {% endfor %}
+            </div>
+            {{ form.rating }}
+        </div>
+
+        <!-- Comment Text -->
+        <textarea name="text" 
+                  class="w-full p-3 rounded-lg border border-gray-300 mb-4 text-black"
+                  rows="4">{{ form.text.value }}</textarea>
+        
+        <div class="flex space-x-2">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Save Changes
+            </button>
+            <a href="{% url 'index' project_id=comment.project.id %}" 
+               class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Initialize star rating with current value
+    document.addEventListener('DOMContentLoaded', () => {
+        const ratingInput = document.querySelector('[name="rating"]');
+        const stars = document.querySelectorAll('.star-rating');
+        
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                ratingInput.value = index + 1;
+                stars.forEach((s, i) => {
+                    s.classList.toggle('text-yellow-400', i <= index);
+                    s.classList.toggle('text-gray-400', i > index);
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

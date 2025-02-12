@@ -22,6 +22,7 @@ class Comment(models.Model):
     text = models.TextField(max_length=500)
     rating = models.IntegerField(default=3)
     created_at = models.DateTimeField(auto_now_add=True)
+    edited_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         unique_together = ('user', 'project')  # Ensures one comment per user per project

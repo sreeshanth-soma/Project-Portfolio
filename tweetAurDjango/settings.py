@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from decouple import config
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -143,8 +144,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+LOGIN_REDIRECT_URL = '/tweet/'
 
 
-LOGIN_URL =  '/accounts/login'
-LOGIN_REDIRECT_URL = '/tweet'
-LOGOUT_REDIRECT_URL = '/tweet'
+
+# LOGIN_URL =  '/accounts/login'
+# LOGIN_REDIRECT_URL = '/tweet'
+# LOGOUT_REDIRECT_URL = '/tweet'
+
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',  # Default authentication
+#     'allauth.account.auth_backends.AuthenticationBackend',  # Email authentication
+# ]
+
+# ACCOUNT_AUTHENTICATION_METHOD = "email"
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = False  # Disable username if you want only emails
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # Users must verify their email

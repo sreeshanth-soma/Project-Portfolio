@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mx-auto">
+<div class="container mx-auto" >
     <!-- User Profile Section -->
     <div class="bg-gray-800 text-white rounded-lg shadow-lg p-6">
         <h1 class="text-3xl font-bold mb-2">{{ user.username }}</h1>
@@ -19,7 +19,9 @@
     {% if projects %}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for project in projects %}
-            <div class="bg-gray-800 text-white rounded-lg shadow-lg p-6">
+            <a href="{% url 'index' project.id %}" class="block">
+                <div class="bg-gray-800 text-white rounded-lg shadow-lg p-6 border border-transparent hover:border-yellow-300 transition duration-300">
+            
                 <!-- Project Image -->
                 {% if project.image %}
                 <div class="mb-4">

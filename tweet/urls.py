@@ -13,8 +13,12 @@ urlpatterns = [
     path('search/', views.search_users, name='search_users'),
     path('register/', views.register, name = "register"),
     path('profile/<str:username>/', views.user_profile, name='user_profile'),
-    path('index/<int:project_id>/', views.index, name="index"),
-    path('add_comment/<int:project_id>/', views.add_comment, name="add_comment"),
+    path('project/<int:project_id>/', views.index, name='index'),
+    path('project/<int:project_id>/comment/', views.add_comment, name='add_comment'),
+    path('accounts/login/', views.custom_login_view, name='login'),
+    path('tweet/',views.project_list, name = "project_list"),
+    path('comment/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
+
 
     path('about/', views.about, name='about'),
     path('services/', views.services, name='services'),
