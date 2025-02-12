@@ -39,18 +39,22 @@ Tweet Home
             <h2 class="text-2xl font-semibold">{{ project.user.username }}</h2>
         </div>
 
-        <!-- Rating -->
-        <div class="flex justify-center items-center mt-4">
-            {% for i in "12345" %}
-                {% if i|add:0 <= project.average_rating %}
-                    <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.181c.969 0 1.371 1.24.588 1.81l-3.39 2.455a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.39 2.455c-.784.57-1.838-.197-1.54-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.6 9.392c-.783-.57-.38-1.81.588-1.81h4.181a1 1 0 00.95-.69l1.286-3.965z"></path>
-                    </svg>
-                {% else %} 
-                    <svg class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.181c.969 0 1.371 1.24.588 1.81l-3.39 2.455a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.39 2.455c-.784.57-1.838-.197-1.54-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.6 9.392c-.783-.57-.38-1.81.588-1.81h4.181a1 1 0 00.95-.69l1.286-3.965z"></path>
-                    </svg>
-                {% endif %} 
+        <!-- Rating Display -->
+        <div class="flex items-center justify-center gap-1 mt-4">
+            {% for star_num in "12345" %}
+                {% with star_value=star_num|add:0 %}
+                    {% if star_value <= project.average_rating %}
+                        <!-- Filled Star -->
+                        <svg class="w-8 h-8 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                    {% else %}
+                        <!-- Outline Star -->
+                        <svg class="w-8 h-8 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                    {% endif %}
+                {% endwith %}
             {% endfor %}
         </div>
         
