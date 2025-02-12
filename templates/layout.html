@@ -78,6 +78,11 @@
                     <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 ml-2 rounded" type="submit">
                         Logout
                     </button>
+                    <a href="{% url 'user_profile' request.user.username %}" 
+               class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded">
+                View Profile
+            </a>
+
                 </form>
                 {% else %}
                 <a href="{% url 'register' %}" class="inline-block bg-blue-500 text-white font-medium py-2 px-4 rounded hover:bg-blue-600 ml-2">

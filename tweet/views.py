@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Project, Comment
-from .forms import ProjectForm, UserRegistrationForm, CommentForm
+from .models import Project, Comment, UserProfile
+from .forms import ProfilePictureForm, ProjectForm, UserRegistrationForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
@@ -126,8 +126,18 @@ def search_users(request):
 
 def user_profile(request, username):
     user = get_object_or_404(User, username=username)
+    profile = get_object_or_404(UserProfile, user=user)  # Get the profile object
     projects = Project.objects.filter(user=user).order_by('-created_at')
-    return render(request, 'profile.html', {'user': user, 'projects': projects})
+    
+    # Debugging: Check if the user and profile.user match
+    print(f"Logged-in User: {request.user.username} (ID: {request.user.id})")
+    print(f"Profile User: {profile.user.username} (ID: {profile.user.id})")
+    
+    return render(request, 'profile.html', {
+        'user': user,
+        'profile': profile,  # Pass the profile as well
+        'projects': projects
+    })
 
 def project_list(request):
     projects = Project.objects.all().order_by('-created_at')
@@ -212,3 +222,26 @@ def custom_login_view(request):
         form = AuthenticationForm()
 
     return render(request, 'registration/login.html', {'form': form})
+
+
+
+@login_required
+def user_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    profile, created = UserProfile.objects.get_or_create(user=user)
+    projects = Project.objects.filter(user=user).order_by('-created_at')
+
+    if request.method == 'POST':
+        form = ProfilePictureForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('user_profile', username=user.username)
+    else:
+        form = ProfilePictureForm(instance=profile)
+
+    return render(request, 'profile.html', {
+        'user': user,
+        'profile': profile,
+        'projects': projects,
+        'form': form,
+    })

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project, Comment
+from .models import Project, Comment, UserProfile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -28,3 +28,11 @@ class CommentForm(forms.ModelForm):
             raise forms.ValidationError("Rating must be between 1 and 5")
         return rating
 
+class ProfilePictureForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture', 'background_picture', 'linkedin_url']
+
+        widgets = {
+            'linkedin_url': forms.URLInput(attrs={'class': 'w-full p-2 border rounded-lg'})
+        }
