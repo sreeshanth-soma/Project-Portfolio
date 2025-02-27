@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-2xl font-bold text-center my-4">Welcome to Showcase Platform</h1>
+    
+    <div class="text-center">
+        <a href="{% url 'project_list' %}" class="inline-block bg-blue-500 text-white font-medium py-2 px-4 rounded hover:bg-blue-600">
+            View Projects
+        </a>
+        <div class="p-3">
+          {% if user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 ml-2 rounded" type="submit">
+                        Logout
+                    </button>
+                    <a href="{% url 'user_profile' request.user.username %}" 
+               class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded">
+                View Profile
+            </a>
+
+                </form>
+                {% else %}
+                <a href="{% url 'register' %}" class="inline-block bg-blue-500 text-white font-medium py-2 px-4 rounded hover:bg-blue-600 ml-2">
+                    Register
+                </a>
+                <a href="{% url 'login' %}" class="inline-block bg-green-500 text-white font-medium py-2 px-4 rounded hover:bg-green-600 ml-2">
+                    Login
+                </a>
+                {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

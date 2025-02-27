@@ -1,9 +1,8 @@
 {% extends "layout.html" %}
-
+{% load static %}
 {% block title %}
 {{ user.username }}'s Profile
 {% endblock %}
-
 {% block content %}
 <section class="w-full overflow-hidden dark:bg-gray-900">
     <div class="flex flex-col">
@@ -21,13 +20,14 @@
             <!-- Upload Background Picture Button -->
             <form method="post" enctype="multipart/form-data" class="absolute bottom-4 right-4">
                 {% csrf_token %}
+                {% if request.user.id == profile.user.id %}
                 <label for="id_background_picture" class="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
                     Change Cover
                 </label>
+                {% endif %}
                 <input type="file" name="background_picture" id="id_background_picture" class="hidden" onchange="this.form.submit()">
             </form>
         </div>
-
         <!-- Profile Header -->
         <div class="sm:w-[80%] w-[90%] mx-auto flex items-center mt-8 mb-6">
             <!-- Profile Image Container -->
@@ -38,12 +38,13 @@
                         alt="Profile" 
                         class="rounded-full lg:w-[12rem] lg:h-[12rem] md:w-[10rem] md:h-[10rem] sm:w-[8rem] sm:h-[8rem] w-[7rem] h-[7rem] object-cover border-4 border-blue-500 shadow-lg">
                 {% else %}
-                    <img src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw3fHxwZW9wbGV8ZW58MHwwfHx8MTcxMTExMTM4N3ww&ixlib=rb-4.0.3&q=80&w=1080" 
+                    <img src= "{% static "images/defaultProfile.png" %}"
                         alt="Default Profile" 
                         class="rounded-full lg:w-[12rem] lg:h-[12rem] md:w-[10rem] md:h-[10rem] sm:w-[8rem] sm:h-[8rem] w-[7rem] h-[7rem] object-cover border-4 border-blue-500 shadow-lg">
                 {% endif %}
-                
+
                 <!-- Upload Profile Picture Button -->
+                {% if request.user.id == profile.user.id %}
                 <form method="post" enctype="multipart/form-data" class="absolute -bottom-2 -right-2">
                     {% csrf_token %}
                     <label for="id_profile_picture" class="cursor-pointer bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 shadow-md flex items-center justify-center w-10 h-10">
@@ -54,6 +55,7 @@
                     </label>
                     <input type="file" name="profile_picture" id="id_profile_picture" class="hidden" onchange="this.form.submit()">
                 </form>
+                {%endif%}
             </div>
 
             <!-- Username -->
@@ -118,9 +120,6 @@
                                 </div>
                             </form>
                         {% endif %}
-
-
-                        
                     </div>
                 </div>
 

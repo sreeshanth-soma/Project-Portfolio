@@ -9,7 +9,7 @@
     {% if messages %}
         <div class="messages">
             {% for message in messages %}
-                <div class="{% if message.tags == 'error' %}bg-red-300{% else %}bg-green-300{% endif %} border-l-4 border-red-400 p-4 mb-4 rounded-lg shadow-md text-xl font-semibold">
+                <div class="{% if message.tags == 'error' %}bg-red-300{% else %}bg-green-300{% endif %} text-amber-900 border-l-4 border-red-400 p-4 mb-4 rounded-lg shadow-md text-xl font-semibold">
                     <p>{{ message }}</p>
                 </div>
             {% endfor %}
@@ -91,7 +91,7 @@
 
         <!-- Comments List -->
         <div class="bg-white text-gray-900 dark:bg-gray-800 dark:text-white rounded-lg shadow-lg p-6 transition-colors duration-300">
-            <h3 class="text-xl font-bold mb-4">Community Feedback ({{ project.comments.count }})</h3>
+            <h3 class="text-xl font-bold mb-4">Comments ({{ project.comments.count }})</h3>
 
             {% for comment in project.comments.all %}
                 <div class="mb-6 pb-4 border-b border-gray-200 dark:border-gray-700 relative">  

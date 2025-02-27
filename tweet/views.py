@@ -4,7 +4,7 @@ from .forms import ProfilePictureForm, ProjectForm, UserRegistrationForm, Commen
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
-from django.db.models import Q, Avg
+from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils import timezone
@@ -71,7 +71,7 @@ def add_comment(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     
     if Comment.objects.filter(user=request.user, project=project).exists():
-        messages.error(request, "You have already commented on this project.")
+        # messages.error(request, "You have already commented on this project.")
         return redirect('index', project_id=project.id)
 
     if request.method == "POST":
@@ -80,7 +80,7 @@ def add_comment(request, project_id):
             comment = form.save(commit=False)
             comment.user = request.user
             comment.project = project
-            comment.rating = int(request.POST.get('rating', 3))  # Get rating from hidden input
+            comment.rating = int(request.POST.get('rating', 0))  # Get rating from hidden input
             comment.save()
             messages.success(request, "Your comment has been added!")
             return redirect('index', project_id=project.id)
