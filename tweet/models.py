@@ -4,7 +4,8 @@ from django.db.models import Avg
 
 class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.TextField(max_length=240)
+    name = models.CharField(max_length=255, blank=False, null=False,default="")  # New field for project name
+    text = models.TextField()
     image = models.ImageField(upload_to='photos/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -14,7 +15,7 @@ class Project(models.Model):
         return round(avg_rating, 1) if avg_rating is not None else 0  # Round to 1 decimal place
 
     def __str__(self):
-        return f'{self.user.username} - {self.text[:30]}'
+        return f'{self.user.username} - {self.name}'  # Modified here
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
