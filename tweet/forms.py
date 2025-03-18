@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 class ProjectForm(forms.ModelForm):
      class Meta:
           model = Project
-          fields = ['text', 'image']
+          fields = ['name','text', 'image']
 
 class UserRegistrationForm(UserCreationForm):
      email = forms.EmailField()

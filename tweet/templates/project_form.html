@@ -81,6 +81,11 @@ Tweet Home
         <form method="post" enctype="multipart/form-data" class="space-y-6">
             {% csrf_token %}
             <div class="space-y-4">
+                 <!-- New Project Name Input -->
+        {% comment %} <label class="block text-white text-lg font-semibold">Project Name</label>
+        <input type="text" name="name" value="{{ form.instance.name }}" required
+               class="block w-full text-white bg-gray-700 p-2 rounded-lg border border-gray-500">
+         {% endcomment %}
                 {{ form.as_p }}
             </div>
             <button type="submit">Submit</button>
