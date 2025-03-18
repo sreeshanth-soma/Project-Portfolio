@@ -16,12 +16,12 @@ Tweet Home
     <div class="bg-white text-gray-900 dark:bg-gray-800 dark:text-white rounded-lg shadow-lg p-6 w-96 relative transition-colors duration-300">
         <!-- Three Dots Option -->
         {% if project.user == user %}
-        <div class="absolute top-4 right-4">
-            <button class="p-2 rounded-full hover:bg-gray-700">
-                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M6 10a2 2 0 114 0 2 2 0 01-4 0zM2 10a2 2 0 114 0 2 2 0 01-4 0zM10 10a2 2 0 114 0 2 2 0 01-4 0z"></path>
-                </svg>
-            </button>
+<div class="absolute top-4 right-4">
+    <button class="p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-700">
+        <svg class="w-6 h-6 text-black dark:text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M6 10a2 2 0 114 0 2 2 0 01-4 0zM2 10a2 2 0 114 0 2 2 0 01-4 0zM10 10a2 2 0 114 0 2 2 0 01-4 0z"></path>
+        </svg>
+    </button>
             <div class="hidden bg-gray-700 text-white rounded-lg shadow-lg absolute right-0 mt-2">
                 <a href="{% url 'project_edit' project.id %}" class="block w-full text-left px-4 py-2 hover:bg-gray-600">Edit</a>
                 <a href="{% url 'project_delete' project.id %}" class="block w-full text-left px-4 py-2 hover:bg-gray-600">Delete</a>
@@ -66,7 +66,68 @@ Tweet Home
     </div>
     {% endfor %}
 </div>
+<!-- Floating Chatbot Button -->
+<div id="chat-icon" onclick="openChatbotModal()"
+     class="fixed bottom-6 right-6 bg-blue-500 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg cursor-pointer">
+    💬
+</div>
+
+<!-- Chatbot Modal -->
+<div id="chatbotModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-2xl w-11/12 md:w-2/3 lg:w-1/3 max-w-lg relative border border-gray-300 dark:border-gray-700">
+        <button onclick="closeChatbotModal()" class="absolute top-3 right-3 text-gray-600 dark:text-gray-300 hover:text-red-500 text-xl">
+            &times;
+        </button>
+        <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-4">💬 AI Chatbot</h2>
+        <div id="chatbox" class="h-72 overflow-y-auto p-4 bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded-lg shadow-inner border border-gray-300 dark:border-gray-700">
+            <p class="text-gray-500 text-center">Start the conversation...</p>
+        </div>
+        <div class="flex items-center mt-4">
+            <input type="text" id="chat-input" class="w-full p-3 border rounded-lg text-black bg-gray-50 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()" class="ml-2 px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                ➤
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
+    function openChatbotModal() {
+        document.getElementById("chatbotModal").classList.remove("hidden");
+    }
+
+    function closeChatbotModal() {
+        document.getElementById("chatbotModal").classList.add("hidden");
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    }
+
+    function sendMessage() {
+        let userInput = document.getElementById("chat-input").value.trim();
+        if (!userInput) return;
+
+        let chatbox = document.getElementById("chatbox");
+        chatbox.innerHTML += `<p class="text-right text-blue-600"><strong>You:</strong> ${userInput}</p>`;
+
+        fetch(`/chatbot/api/?message=${encodeURIComponent(userInput)}`)
+            .then(response => response.json())
+            .then(data => {
+                chatbox.innerHTML += `<p class="text-left text-green-600"><strong>Bot:</strong> ${data.response.replace(/\n/g, "<br>")}</p>`;
+                chatbox.scrollTop = chatbox.scrollHeight;
+            })
+            .catch(error => {
+                chatbox.innerHTML += `<p class="text-red-500"><strong>Error:</strong> Could not reach AI.</p>`;
+            });
+
+        document.getElementById("chat-input").value = "";
+    }
+
+
+
     document.addEventListener("DOMContentLoaded", () => {
         // Select all dropdown buttons
         const dropdownButtons = document.querySelectorAll('.absolute > button');

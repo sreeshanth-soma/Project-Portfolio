@@ -18,6 +18,7 @@ urlpatterns = [
     path('accounts/login/', views.custom_login_view, name='login'),
     path('tweet/',views.project_list, name = "project_list"),
     path('comment/<int:comment_id>/edit/', views.edit_comment, name='edit_comment'),
+    path("chatbot/", include("chatbot.urls")),
 
 
     path('about/', views.about, name='about'),

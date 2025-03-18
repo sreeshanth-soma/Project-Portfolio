@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        #chatbox {
+            width: 50%;
+            height: 400px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            margin: auto;
+            background: #f9f9f9;
+        }
+        .user-message {
+            text-align: right;
+            color: blue;
+        }
+        .bot-message {
+            text-align: left;
+            color: green;
+        }
+        input, button {
+            margin-top: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>AI Chatbot</h2>
+    <div id="chatbox"></div>
+
+    <input type="text" id="userInput" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+     function sendMessage() {
+          let userInput = document.getElementById("userInput").value;
+          if (!userInput.trim()) return;
+      
+          let chatbox = document.getElementById("chatbox");
+          chatbox.innerHTML += `<p class='user-message'><strong>You:</strong> ${userInput}</p>`;
+      
+          fetch(`/chatbot/api/?message=${encodeURIComponent(userInput)}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json(); // Ensure the response is JSON
+    })
+    .then(data => {
+        if (data.response) {
+            // Convert newlines to <br> for proper formatting
+            let formattedResponse = data.response.replace(/\n/g, "<br>");
+            
+            // Display the bot response
+            chatbox.innerHTML += `<p class='bot-message'><strong>Bot:</strong> ${formattedResponse}</p>`;
+        } else {
+            chatbox.innerHTML += `<p class='bot-message'><strong>Bot:</strong> Unexpected response</p>`;
+        }
+        chatbox.scrollTop = chatbox.scrollHeight;  // Auto-scroll
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        chatbox.innerHTML += `<p style="color: red;"><strong>Error:</strong> Failed to fetch response</p>`;
+    });
+
+      
+          document.getElementById("userInput").value = "";
+      }
+      
+    </script>
+
+</body>
+</html>

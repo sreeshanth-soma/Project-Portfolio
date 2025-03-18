@@ -18,6 +18,10 @@ from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load Gemini API Key
+GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'django_browser_reload',
+    'chatbot',
 ]
 
 TAILWIND_APP_NAME = 'theme'
