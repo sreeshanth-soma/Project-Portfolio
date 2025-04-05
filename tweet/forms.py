@@ -7,6 +7,10 @@ class ProjectForm(forms.ModelForm):
      class Meta:
           model = Project
           fields = ['name','text', 'image']
+          labels={
+              'name':'Project name',
+              'text':'Description',
+          }
 
 class UserRegistrationForm(UserCreationForm):
      email = forms.EmailField()

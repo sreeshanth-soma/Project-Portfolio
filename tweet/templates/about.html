@@ -1,15 +1,67 @@
+<!-- Make sure you have Tailwind CSS and Alpine.js linked in your layout.html -->
 {% extends "layout.html" %}
 
-{% block title %}
-About page
-{% endblock %}
+{% block title %}About proXpo{% endblock %}
 
 {% block content %}
-<h1 class="text-3xl self-center">About Page:</h1>
-<div class="bg-green-400 text-2xl ">
-     <div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, vel provident blanditiis, earum officia ad enim veniam consequuntur deserunt quae est, tempora voluptatem doloremque alias corporis adipisci iusto vitae praesentium.
-          Dolores, dicta. Commodi expedita enim delectus culpa blanditiis consectetur odit at, cupiditate, error dignissimos nihil quam, ea labore nesciunt quisquam voluptatibus. Saepe in ipsa consequuntur velit qui? Incidunt, facilis tempore.
-     </div>
+<div class="text-gray-700 dark:text-white">
+<!-- Section 1: Mission -->
+<section class="flex flex-col-reverse md:flex-row items-center gap-8 px-6 md:px-20 py-16">
+  <div class="md:w-1/2 text-center md:text-left">
+    <h2 class="text-4xl font-bold mb-4">🚀 Mission</h2>
+    <p class="text-gray-700 dark:text-white text-lg">
+      Empowering students to innovate and grow through collaboration, peer feedback, and visibility.
+    </p>
+  </div>
+  <div class="md:w-1/2">
+    <img src="/static/images/mission.svg" alt="Mission Illustration" class="w-full max-w-md mx-auto">
+  </div>
+</section>
+
+<!-- Section 2: Founding Story -->
+<section class="flex flex-col md:flex-row items-center gap-8 px-6 md:px-20 py-16 bg-gray-50">
+  <div class="md:w-1/2">
+    <img src="/static/images/founding.svg" alt="Founding Illustration" class="w-full max-w-md mx-auto">
+  </div>
+  <div class="md:w-1/2 text-center md:text-left">
+    <h2 class="text-4xl font-bold mb-4">📖 Founding Story</h2>
+    <p class="text-gray-700  dark:text-white text-lg">
+      proXpo was created by students, for students — to give them a space to showcase their talent and learn from each other. It started as a campus initiative and evolved into a vibrant digital platform.
+    </p>
+  </div>
+</section>
+
+<!-- Section 3: What the Website Does -->
+<section class="flex flex-col-reverse md:flex-row items-center gap-8 px-6 md:px-20 py-16">
+  <div class="md:w-1/2 text-center md:text-left">
+    <h2 class="text-4xl font-bold mb-6">🔧 What the website does</h2>
+    <ul class="text-gray-700 dark:text-white text-lg space-y-2 list-disc list-inside">
+      <li>📸 Showcase your projects with images and summaries</li>
+      <li>💬 Get feedback from peers & professors through comments and ratings</li>
+      <li>🤝 Collaborate with others and build academic connections</li>
+      <li>🤖 24/7 AI-powered chatbot assistant for support and guidance</li>
+    </ul>
+  </div>
+  <div class="md:w-1/2">
+    <img src="/static/images/features.svg" alt="Features Illustration" class="w-full max-w-md mx-auto">
+  </div>
+</section>
 </div>
+<!-- CTA Section -->
+<section class="bg-blue-600 text-white text-center py-16 px-6 md:px-20">
+  <h2 class="text-3xl font-bold mb-4">🎓 Ready to show the world your project?</h2>
+  <p class="text-lg mb-6">Join proXpo and be part of a growing community of creators and collaborators.</p>
+  <a href="/signup" class="inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition-all">✍️ Get Started</a>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-white text-center py-6 text-sm">
+  <p>© 2025 proXpo. All rights reserved.</p>
+  <p>📧 Contact us: <a href="mailto:contact@proxpo.com" class="underline hover:text-blue-400">contact@proxpo.com</a></p>
+  <p class="mt-2">Follow us:
+    <a href="#" class="underline hover:text-blue-400 mx-1">GitHub</a> |
+    <a href="#" class="underline hover:text-blue-400 mx-1">LinkedIn</a>
+  </p>
+</footer>
+
 {% endblock %}
