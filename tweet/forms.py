@@ -6,10 +6,16 @@ from django.contrib.auth.models import User
 class ProjectForm(forms.ModelForm):
      class Meta:
           model = Project
-          fields = ['name','text', 'image']
+          fields = ['name','text', 'image','project_type']
           labels={
               'name':'Project name',
               'text':'Description',
+              'project_type':'Select Project Category'
+          }
+          widgets={
+              'project_type':forms.RadioSelect(attrs={
+                  'class':'hidden peer'
+              })
           }
 
 class UserRegistrationForm(UserCreationForm):

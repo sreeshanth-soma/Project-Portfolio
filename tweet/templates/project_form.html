@@ -24,6 +24,25 @@ Tweet Home
         box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
     }
 
+    /* 👇 Add this block to match input box with textarea width */
+    input[type="text"] {
+        background-color: #ffffff;
+        color: #000000;
+        border: 2px solid #64748B;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 16px;
+        width: 100%;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        box-sizing: border-box;
+    }
+
+    input[type="text"]:focus {
+        outline: none;
+        border-color: #3B82F6;
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+    }
+
     .form-container {
         background-color: #ffffff;
         color: #000000;
@@ -74,6 +93,12 @@ Tweet Home
             border: 2px solid #4A576C;
         }
 
+        input[type="text"] {
+            background-color: #273853;
+            color: #ffffff;
+            border: 2px solid #4A576C;
+        }
+
         .form-container {
             background-color: #0F172A;
             color: #ffffff;
@@ -95,7 +120,7 @@ Tweet Home
     </h1>
 
     <!-- Outer Card Container -->
-    <div class="bg-gray-50 text-gray-900 border border-gray-300 dark:bg-[#0F172A] dark:text-white dark:border-gray-700 rounded-lg shadow-lg p-6 mb-6 transition-colors duration-300">
+    <div class="bg-gray-50 dark:bg-[#0F172A] text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-6 mb-6 transition-colors duration-300">
 
         <!-- Form Section -->
         <div class="form-container">
@@ -111,7 +136,25 @@ Tweet Home
                 {% csrf_token %}
                 <div class="space-y-4">
                     {{ form.as_p }}
+                    <label for ="images" class="block text-whte text-lg font-semibold">Upload Images</label>
+                <input type="file" name="images" multiple class="block w-full text-white bg-gray-700 p-2 rounded-lg border border-gray-500">
+                     <!-- Tag Buttons Section -->
+                     <div class="mt-4">
+                        <label class="block text-gray-700 dark:text-white font-semibold mb-2">Select Tags:</label>
+                        <div id="tag-container" class="flex flex-wrap gap-2">
+                            <button type="button" class="tag-btn" data-value="Real-time">Real-time</button>
+                            <button type="button" class="tag-btn" data-value="Personal">Personal</button>
+                            <button type="button" class="tag-btn" data-value="Minor">Minor</button>
+                            <button type="button" class="tag-btn" data-value="Major">Major</button>
+                            <button type="button" class="tag-btn" data-value="Coursework">Coursework</button>
+                            <button type="button" class="tag-btn" data-value="Archived">Archived</button>
+                        </div>
+                        <!-- Hidden input to store selected tags -->
+                        <input type="hidden" name="selected_tags" id="selected-tags">
+
+                    </div>
                 </div>
+                    
                 <button id="submit-btn" type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold py-2 px-4 rounded-lg transition-transform hover:-translate-y-1 shadow-md hover:shadow-lg">
                     Submit
                 </button>
